@@ -1,54 +1,25 @@
 "use client";
 
 import { useInfiniteQuery } from "@tanstack/react-query";
-import Image from "next/image";
+// import Image from "next/image";
 import { useEffect, useRef, useCallback, useState, useMemo } from "react";
 import { debounce } from "lodash";
-import PokemonItem from "./PokemonItem";
-import { Pokemon } from "../types/pokemon";
+import PokemonItem from "./pokemon-item";
+import { getPaginatedPokemon } from "@/services/pokemon-service";
 
 const LIMIT = 5;
 const DEBOUNCE_DELAY = 300; // milliseconds
 
 async function fetchPokemonPage({
   pageParam = 0,
-  searchTerm = "",
-  selectedTypes = [],
+  // searchTerm = "",
+  // selectedTypes,
 }) {
-  try {
-    const res = await fetch(
-      `https://pokeapi.co/api/v2/pokemon/?limit=${LIMIT}&offset=${pageParam}`
-    );
-
-    if (!res.ok) {
-      throw new Error(`API error: ${res.status}`);
-    }
-
-    const listData = await res.json();
-
-    const details = await Promise.all(
-      listData.results.map(async (pokemon) => {
-        const detailRes = await fetch(pokemon.url);
-        if (!detailRes.ok) {
-          throw new Error(`Failed to fetch details for ${pokemon.name}`);
-        }
-        return detailRes.json();
-      })
-    );
-
-    return {
-      pokemons: details,
-      nextOffset: pageParam + LIMIT,
-      hasMore: listData.next !== null,
-    };
-  } catch (error) {
-    console.error("Error fetching Pokemon:", error);
-    throw error;
-  }
+  return await getPaginatedPokemon(LIMIT, pageParam);
 }
 
 export default function PokemonGrid() {
-  const observerRef = useRef(null);
+  const observerRef = useRef<IntersectionObserver | null>(null);
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [isSearching, setIsSearching] = useState(false);
@@ -73,12 +44,7 @@ export default function PokemonGrid() {
     refetch,
   } = useInfiniteQuery({
     queryKey: ["pokemonList", searchTerm, selectedTypes],
-    queryFn: () =>
-      fetchPokemonPage({
-        pageParam: 0,
-        searchTerm,
-        selectedTypes,
-      }),
+    queryFn: ({ pageParam = 0 }) => fetchPokemonPage({ pageParam }), // Add pageParam here
     initialPageParam: 0,
     getNextPageParam: (lastPage) =>
       lastPage.hasMore ? lastPage.nextOffset : undefined,
@@ -92,7 +58,7 @@ export default function PokemonGrid() {
   }, [debouncedSearch]);
 
   const lastPokemonRef = useCallback(
-    (node) => {
+    (node: HTMLDivElement | null) => {
       if (observerRef.current) observerRef.current.disconnect();
 
       observerRef.current = new IntersectionObserver((entries) => {
@@ -106,8 +72,8 @@ export default function PokemonGrid() {
     [fetchNextPage, hasNextPage, isFetchingNextPage]
   );
 
-  const filteredPokemon = useMemo(
-    () =>
+  const filteredPokemon = useMemo(() => {
+    const allPokemon =
       data?.pages.flatMap((page) =>
         page.pokemons.filter((pokemon) => {
           const matchesSearch =
@@ -122,9 +88,10 @@ export default function PokemonGrid() {
 
           return matchesSearch && matchesType;
         })
-      ) ?? [],
-    [data?.pages, searchTerm, selectedTypes]
-  );
+      ) ?? [];
+
+    return allPokemon;
+  }, [data?.pages, searchTerm, selectedTypes]);
 
   const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIsSearching(true);
@@ -202,7 +169,16 @@ export default function PokemonGrid() {
           {filteredPokemon.map((pokemon, index) => {
             const isLastPokemon = index === filteredPokemon.length - 1;
 
-            return <PokemonItem key={pokemon} pokemon={pokemon} />;
+            console.log("pokemon", pokemon.id);
+
+            return (
+              <PokemonItem
+                key={pokemon.id}
+                lastPokemonRef={lastPokemonRef}
+                isLastPokemon={isLastPokemon}
+                pokemon={pokemon}
+              />
+            );
           })}
         </div>
       )}

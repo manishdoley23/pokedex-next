@@ -1,7 +1,15 @@
 import Image from "next/image";
-import { Pokemon } from "../types/pokemon";
+import { PokemonApiResponse } from "@/lib/types/pokemon";
 
-export default function PokemonItem({ pokemon }: { pokemon: Pokemon }) {
+export default function PokemonItem({
+  isLastPokemon,
+  pokemon,
+  lastPokemonRef,
+}: {
+  pokemon: PokemonApiResponse;
+  isLastPokemon: boolean;
+  lastPokemonRef: (node: HTMLDivElement | null) => void;
+}) {
   return (
     <div
       key={pokemon.id}
@@ -10,7 +18,7 @@ export default function PokemonItem({ pokemon }: { pokemon: Pokemon }) {
     >
       <div className="relative w-32 h-32">
         <Image
-          src={pokemon.sprites.front_default}
+          src={pokemon.sprites.front_default ?? ""}
           alt={pokemon.name}
           fill
           className="object-contain"

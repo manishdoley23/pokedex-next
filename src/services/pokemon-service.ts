@@ -1,4 +1,4 @@
-import { getPokemonList, getPokemonDetails } from "@/lib/api";
+import { getPokemonList, getPokemonDetails } from "@/lib/api/pokemon";
 
 export async function getPaginatedPokemon(limit: number, offset: number) {
   const listData = await getPokemonList(limit, offset);

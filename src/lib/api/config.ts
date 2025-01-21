@@ -7,7 +7,7 @@ export class ApiError extends Error {
   }
 }
 
-export async function fetchWithError(url: string) {
+export async function _fetch(url: string) {
   const response = await fetch(url);
   if (!response.ok) {
     throw new ApiError(response.status, `API Error: ${response.status}`);

@@ -1,12 +1,8 @@
-import type { Pokemon } from "@/types/pokemon";
+// import type { PokemonApiResponse } from "@/lib/types/pokemon";
+// import type { Pokemon } from "@/types/pokemon";
 
-export function transformPokemonResponse(data: any): Pokemon {
-  return {
-    id: data.id,
-    name: data.name,
-    sprites: {
-      front_default: data.sprites.front_default,
-    },
-    types: data.types,
-  };
-}
+// export function transformPokemonResponse(data: PokemonApiResponse) {
+//   return {
+
+//   };
+// }
