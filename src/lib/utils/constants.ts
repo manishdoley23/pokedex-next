@@ -26,6 +26,27 @@ export enum PokemonAbilityEnum {
   KeenEye = "keen-eye",
 }
 
+export enum PokemonTypesEnum {
+  Normal = "normal",
+  Fire = "fire",
+  Water = "water",
+  Electric = "electric",
+  Grass = "grass",
+  Ice = "ice",
+  Fighting = "fighting",
+  Poison = "poison",
+  Ground = "ground",
+  Flying = "flying",
+  Psychic = "psychic",
+  Bug = "bug",
+  Rock = "rock",
+  Ghost = "ghost",
+  Dragon = "dragon",
+  Dark = "dark",
+  Steel = "steel",
+  Fairy = "fairy",
+}
+
 export enum VersionGenerationGroupEnum {
   RedBlue = "red-blue",
   Yellow = "yellow",
@@ -47,3 +68,24 @@ export enum VersionGenerationGroupEnum {
 }
 
 export const INITIAL_FETCH_LIMIT = 50;
+
+export const TYPE_COLORS: Record<PokemonTypesEnum, string> = {
+  [PokemonTypesEnum.Normal]: "#A8A878",
+  [PokemonTypesEnum.Fire]: "#F08030",
+  [PokemonTypesEnum.Water]: "#6890F0",
+  [PokemonTypesEnum.Electric]: "#F8D030",
+  [PokemonTypesEnum.Grass]: "#78C850",
+  [PokemonTypesEnum.Ice]: "#98D8D8",
+  [PokemonTypesEnum.Fighting]: "#C03028",
+  [PokemonTypesEnum.Poison]: "#A040A0",
+  [PokemonTypesEnum.Ground]: "#E0C068",
+  [PokemonTypesEnum.Flying]: "#A890F0",
+  [PokemonTypesEnum.Psychic]: "#F85888",
+  [PokemonTypesEnum.Bug]: "#A8B820",
+  [PokemonTypesEnum.Rock]: "#B8A038",
+  [PokemonTypesEnum.Ghost]: "#705898",
+  [PokemonTypesEnum.Dragon]: "#7038F8",
+  [PokemonTypesEnum.Dark]: "#705848",
+  [PokemonTypesEnum.Steel]: "#B8B8D0",
+  [PokemonTypesEnum.Fairy]: "#EE99AC",
+};

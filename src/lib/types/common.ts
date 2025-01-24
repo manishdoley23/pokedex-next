@@ -42,3 +42,7 @@ export type FrontSetSprites = Pick<
 >;
 export type BaseSprites = SpriteSet<BaseSpriteKeys>;
 export type GenerationSprites = SpriteSet<SpriteKeys>;
+export type NamedAPIResource = {
+  name: string;
+  url: string;
+};

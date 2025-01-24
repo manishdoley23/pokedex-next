@@ -1,12 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useCallback, useMemo } from "react";
-import PokemonItem from "./pokemon-item";
+import PokemonItem from "./pokedex-item";
 import { usePokemonInfiniteQuery } from "@/lib/hooks/use-infinite-query-hooks";
 import { INITIAL_FETCH_LIMIT } from "@/lib/utils/constants";
 import { Loader2 } from "lucide-react";
+import Link from "next/link";
 
-export default function PokemonGrid({
+export default function PokedexGrid({
   searchTerm,
   selectedTypes,
   selectedGenerations,
@@ -170,12 +171,14 @@ export default function PokemonGrid({
             const isLastPokemon = index === filteredPokemon.length - 1;
 
             return (
-              <PokemonItem
-                key={pokemon.id}
-                lastPokemonRef={lastPokemonRef}
-                isLastPokemon={isLastPokemon}
-                pokemon={pokemon}
-              />
+              <Link href={"/pokedex/" + pokemon.id} key={pokemon.id}>
+                <PokemonItem
+                  key={pokemon.id}
+                  lastPokemonRef={lastPokemonRef}
+                  isLastPokemon={isLastPokemon}
+                  pokemon={pokemon}
+                />
+              </Link>
             );
           })}
         </div>

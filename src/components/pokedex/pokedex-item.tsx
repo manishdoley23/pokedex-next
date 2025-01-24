@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { PokemonApiResponse } from "@/lib/types/pokemon";
 
-export default function PokemonItem({
+export default function PokedexItem({
   isLastPokemon,
   pokemon,
   lastPokemonRef,

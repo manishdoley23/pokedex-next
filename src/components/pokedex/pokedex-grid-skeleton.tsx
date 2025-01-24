@@ -2,7 +2,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 const LIMIT = 30;
 
-export default function PokemonGridSkeleton() {
+export default function PokedexGridSkeleton() {
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
       {Array.from({ length: LIMIT }).map((_, index) => (

@@ -1,10 +1,6 @@
-import { BaseSprites, FrontSetSprites } from "./common";
+import { BaseSprites, FrontSetSprites, NamedAPIResource } from "./common";
+import { PokemonType } from "./pokemon-types";
 import { SpriteVersions } from "./sprites";
-
-interface NamedAPIResource {
-  name: string;
-  url: string;
-}
 
 interface VersionDetail {
   rarity: number;
@@ -23,12 +19,7 @@ interface PokemonAbility {
   ability: NamedAPIResource;
 }
 
-interface PokemonType {
-  slot: number;
-  type: NamedAPIResource;
-}
-
-interface PokemonStat {
+export interface PokemonStat {
   base_stat: number;
   effort: number;
   stat: NamedAPIResource;
