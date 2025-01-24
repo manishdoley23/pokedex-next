@@ -1,4 +1,4 @@
-export enum VersionGeneration {
+export enum VersionGenerationEnum {
   I = "generation-i",
   II = "generation-ii",
   III = "generation-iii",
@@ -9,7 +9,24 @@ export enum VersionGeneration {
   VIII = "generation-viii",
 }
 
-export enum VersionGenerationGroup {
+export enum PokemonStatsEnum {
+  "hp",
+  "attack",
+  "defense",
+  "special-attack",
+  "special-defense",
+  "speed",
+}
+
+export enum PokemonAbilityEnum {
+  "overgrow",
+  "blaze",
+  "torrent",
+  "static",
+  "keen-eye",
+}
+
+export enum VersionGenerationGroupEnum {
   RedBlue = "red-blue",
   Yellow = "yellow",
   Crystal = "crystal",
@@ -28,3 +45,5 @@ export enum VersionGenerationGroup {
   Icons = "icons",
   UltraSunUltraMoon = "ultra-sun-ultra-moon",
 }
+
+export const INITIAL_FETCH_LIMIT = 50;

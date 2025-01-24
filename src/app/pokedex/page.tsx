@@ -1,23 +1,25 @@
-import { getPaginatedPokemon } from "@/services/pokemon-service";
 import PokemonContainer from "@/components/pokemon/pokemon-container";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
-import { getQueryClient } from "@/lib/utils";
+import { getQueryClient } from "@/lib/utils/get-query-client";
+import { INITIAL_FETCH_LIMIT } from "@/lib/utils/constants";
+import { PokemonListServiceDTO } from "@/lib/types/dto/pokemon";
+import { getPaginatedPokemonWithDetails } from "@/services/pokemon-service";
 
-const LIMIT = 30;
-
-export default async function HomePage() {
+export default async function Pokedex() {
   const queryClient = getQueryClient();
 
   await queryClient.prefetchInfiniteQuery({
     queryKey: ["pokemonList"],
-    queryFn: async () => await getPaginatedPokemon(LIMIT, 0),
+    queryFn: () => getPaginatedPokemonWithDetails(INITIAL_FETCH_LIMIT, 0),
     initialPageParam: 0,
+    getNextPageParam: (lastPage: PokemonListServiceDTO) =>
+      lastPage.hasMore ? lastPage.nextOffset : undefined,
   });
 
   return (
     <main className="min-h-screen">
-      <HydrationBoundary>
-        <PokemonContainer dehydratedState={dehydrate(queryClient)} />
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <PokemonContainer />
       </HydrationBoundary>
     </main>
   );

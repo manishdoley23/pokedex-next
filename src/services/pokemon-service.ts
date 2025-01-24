@@ -1,6 +1,10 @@
 import { getPokemonList, getPokemonDetails } from "@/lib/api/pokemon";
+import { PokemonListServiceDTO } from "@/lib/types/dto/pokemon";
 
-export async function getPaginatedPokemon(limit: number, offset: number) {
+export async function getPaginatedPokemonWithDetails(
+  limit: number,
+  offset: number
+): Promise<PokemonListServiceDTO> {
   const listData = await getPokemonList(limit, offset);
 
   const details = await Promise.all(

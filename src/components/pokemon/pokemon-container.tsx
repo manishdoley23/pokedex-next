@@ -1,55 +1,67 @@
 "use client";
 
-import { useState } from "react";
-import { HydrationBoundary, DehydratedState } from "@tanstack/react-query";
-import dynamic from "next/dynamic";
-import PokemonGridSkeleton from "./pokemon-grid-skeleton";
+import { useState, useCallback } from "react";
 import { SearchAndFilters } from "../search-filters";
+import PokemonGrid from "./pokemon-grid";
 
-// Dynamically import PokemonGrid with no SSR
-const PokemonGrid = dynamic(() => import("./pokemon-grid"), {
-  ssr: false,
-  loading: () => <PokemonGridSkeleton />,
-});
-
-interface PokemonContainerProps {
-  dehydratedState: DehydratedState;
-}
-
-export default function PokemonContainer({
-  dehydratedState,
-}: PokemonContainerProps) {
+export default function PokemonContainer() {
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
+  const [selectedGenerations, setSelectedGenerations] = useState<string[]>([]);
+  const [selectedAbilities, setSelectedAbilities] = useState<string[]>([]);
+  const [statRanges, setStatRanges] = useState<Record<string, number>>({});
   const [searchTerm, setSearchTerm] = useState("");
-  const [isSearching, setIsSearching] = useState(false);
 
-  const handleSearch = (value: string) => {
-    setIsSearching(true);
+  const handleSearch = useCallback((value: string) => {
     setSearchTerm(value);
-  };
+  }, []);
 
-  const handleTypeFilter = (type: string) => {
+  const handleTypeFilter = useCallback((type: string) => {
     setSelectedTypes((prev) =>
       prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type]
     );
-  };
+  }, []);
+
+  const handleGenerationFilter = useCallback((gen: string) => {
+    setSelectedGenerations((prev) =>
+      prev.includes(gen) ? prev.filter((g) => g !== gen) : [...prev, gen]
+    );
+  }, []);
+
+  const handleStatRangeFilter = useCallback((stat: string, value: number) => {
+    setStatRanges((prev) => ({
+      ...prev,
+      [stat]: value,
+    }));
+  }, []);
+
+  const handleAbilityFilter = useCallback((ability: string) => {
+    setSelectedAbilities((prev) =>
+      prev.includes(ability)
+        ? prev.filter((a) => a !== ability)
+        : [...prev, ability]
+    );
+  }, []);
 
   return (
-    <HydrationBoundary state={dehydratedState}>
-      <div className="container mx-auto p-4">
-        <SearchAndFilters
-          onSearch={handleSearch}
-          onTypeFilter={handleTypeFilter}
-          selectedTypes={selectedTypes}
-          isSearching={isSearching}
-        />
-
-        <PokemonGrid
-          searchTerm={searchTerm}
-          selectedTypes={selectedTypes}
-          setIsSearching={setIsSearching}
-        />
-      </div>
-    </HydrationBoundary>
+    <div className="container mx-auto p-4">
+      <SearchAndFilters
+        onSearch={handleSearch}
+        onTypeFilter={handleTypeFilter}
+        onGenerationFilter={handleGenerationFilter}
+        onStatRangeFilter={handleStatRangeFilter}
+        onAbilityFilter={handleAbilityFilter}
+        selectedTypes={selectedTypes}
+        selectedGenerations={selectedGenerations}
+        selectedAbilities={selectedAbilities}
+        statRanges={statRanges}
+      />
+      <PokemonGrid
+        searchTerm={searchTerm}
+        selectedTypes={selectedTypes}
+        selectedGenerations={selectedGenerations}
+        selectedAbilities={selectedAbilities}
+        statRanges={statRanges}
+      />
+    </div>
   );
 }
