@@ -105,7 +105,7 @@ export function SearchAndFilters({
           <div className="flex flex-col gap-2">
             <p className="font-semibold">Stats:</p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {Object.keys(PokemonStatsEnum).map((stat) => (
+              {Object.values(PokemonStatsEnum).map((stat) => (
                 <div key={stat} className="flex flex-col gap-1">
                   <label className="text-sm capitalize">
                     {stat.replace("-", " ")}
@@ -130,7 +130,7 @@ export function SearchAndFilters({
           <div className="flex flex-col gap-2">
             <p className="font-semibold">Common Abilities:</p>
             <div className="flex flex-wrap gap-2">
-              {Object.keys(PokemonAbilityEnum).map((ability) => (
+              {Object.values(PokemonAbilityEnum).map((ability) => (
                 <button
                   key={ability}
                   onClick={() => onAbilityFilter(ability)}

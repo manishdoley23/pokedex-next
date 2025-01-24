@@ -10,20 +10,20 @@ export enum VersionGenerationEnum {
 }
 
 export enum PokemonStatsEnum {
-  "hp",
-  "attack",
-  "defense",
-  "special-attack",
-  "special-defense",
-  "speed",
+  Hp = "hp",
+  Attack = "attack",
+  Defense = "defense",
+  SpecialAttack = "special-attack",
+  SpecialDefence = "special-defense",
+  Speed = "speed",
 }
 
 export enum PokemonAbilityEnum {
-  "overgrow",
-  "blaze",
-  "torrent",
-  "static",
-  "keen-eye",
+  Overgrow = "overgrow",
+  Blaze = "blaze",
+  Torrent = "torrent",
+  Static = "static",
+  KeenEye = "keen-eye",
 }
 
 export enum VersionGenerationGroupEnum {
