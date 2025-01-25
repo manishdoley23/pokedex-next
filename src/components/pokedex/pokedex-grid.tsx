@@ -9,6 +9,7 @@ import { Loader2 } from "lucide-react";
 // import { cn, getSelectedPokemonIds } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { useTeamStore } from "@/lib/store/team-store";
+import { PokemonApiResponse } from "@/lib/types/pokemon";
 
 export default function PokedexGrid({
   searchTerm,
@@ -16,12 +17,14 @@ export default function PokedexGrid({
   selectedGenerations,
   selectedAbilities,
   statRanges,
+  onPokemonSelect,
 }: {
   searchTerm: string;
   selectedTypes: string[];
   selectedGenerations: string[];
   selectedAbilities: string[];
   statRanges: Record<string, number>;
+  onPokemonSelect?: (pokemon: PokemonApiResponse) => void;
 }) {
   const router = useRouter();
   const activeTeam = useTeamStore((state) => state.activeTeam);
@@ -185,12 +188,13 @@ export default function PokedexGrid({
             return (
               <div
                 key={pokemon.id}
-                onClick={(e) => {
-                  if (e.detail > 0) {
+                onClick={() => {
+                  if (onPokemonSelect && !isSelected) {
+                    onPokemonSelect(pokemon);
+                  } else if (!onPokemonSelect && !isSelected) {
                     router.push(`/pokedex/${pokemon.id}`);
                   }
                 }}
-                className={isSelected ? "pointer-events-none" : ""}
               >
                 <PokedexItem
                   key={pokemon.id}
@@ -198,6 +202,7 @@ export default function PokedexGrid({
                   isLastPokemon={isLastPokemon}
                   isSelected={isSelected}
                   pokemon={pokemon}
+                  isCompareView={!!onPokemonSelect}
                 />
               </div>
             );

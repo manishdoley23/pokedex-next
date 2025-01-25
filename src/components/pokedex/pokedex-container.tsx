@@ -3,8 +3,13 @@
 import { useState, useCallback } from "react";
 import { SearchAndFilters } from "../search-filters";
 import PokemonGrid from "./pokedex-grid";
+import { PokemonApiResponse } from "@/lib/types/pokemon";
 
-export default function PokedexContainer() {
+export default function PokedexContainer({
+  onPokemonSelect,
+}: {
+  onPokemonSelect?: (pokemon: PokemonApiResponse) => void;
+}) {
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [selectedGenerations, setSelectedGenerations] = useState<string[]>([]);
   const [selectedAbilities, setSelectedAbilities] = useState<string[]>([]);
@@ -61,6 +66,7 @@ export default function PokedexContainer() {
         selectedGenerations={selectedGenerations}
         selectedAbilities={selectedAbilities}
         statRanges={statRanges}
+        onPokemonSelect={onPokemonSelect}
       />
     </div>
   );

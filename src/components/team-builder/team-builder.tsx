@@ -14,7 +14,7 @@ import { Button } from "../ui/button";
 import { ArrowLeft } from "lucide-react";
 import { PokemonApiResponse } from "@/lib/types/pokemon";
 import PokedexItem from "../pokedex/pokedex-item";
-import { useInitializeTeamStore } from "@/lib/store/team-store/selectors";
+import { useInitializeTeamStore } from "@/lib/store/team-store/team-selectors";
 import { useTeamStore } from "@/lib/store/team-store";
 
 export default function TeamBuilder() {

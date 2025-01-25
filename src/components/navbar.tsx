@@ -9,6 +9,9 @@ export default function Navbar() {
           <Link href="/" className="text-xs lg:text-lg font-semibold">
             Home
           </Link>
+          <Link href="/pokedex" className="text-xs lg:text-lg font-semibold">
+            Pokedex
+          </Link>
           <Link
             href="/team-builder"
             className="text-xs lg:text-lg font-semibold"
@@ -19,7 +22,7 @@ export default function Navbar() {
             href="/compare-pokemon"
             className="text-xs lg:text-lg font-semibold"
           >
-            Pokemon
+            Compare Pokemon
           </Link>
         </div>
       </div>
