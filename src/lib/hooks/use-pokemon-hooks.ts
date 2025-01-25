@@ -1,49 +1,35 @@
-import { useQuery } from "@tanstack/react-query";
-import { getEvolutionChain, getPokemonById } from "../api/pokemon";
+import { useQueries, useQuery } from "@tanstack/react-query";
+import {
+  getEvolutionChain,
+  getPokemonById,
+  getTypesDataFromId,
+} from "../api/pokemon";
+import { NamedAPIResource } from "../types/common";
 
-export function usePokemonDetail(pokemonId: number) {
+export function useEvolutionChain(evolutionChainId: number) {
+  return useQuery({
+    queryKey: ["evolution", evolutionChainId],
+    queryFn: () => getEvolutionChain(evolutionChainId),
+  });
+}
+
+export function useGetPokemonTypeDetails(
+  types: { slot: number; type: NamedAPIResource }[]
+) {
+  return useQueries({
+    queries: types.map((type) => {
+      const typeId = type.type.url.split("/").slice(-2, -1)[0];
+      return {
+        queryKey: ["type", type.type.name],
+        queryFn: () => getTypesDataFromId(parseInt(typeId)),
+      };
+    }),
+  });
+}
+
+export function useGetPokemonDetails(pokemonId: number) {
   return useQuery({
     queryKey: ["pokemon", pokemonId],
     queryFn: () => getPokemonById(pokemonId),
   });
 }
-
-export function useEvolutionChain(pokemonId: number) {
-  return useQuery({
-    queryKey: ["evolution", pokemonId],
-    queryFn: () => getEvolutionChain(pokemonId),
-  });
-}
-
-// export function useEvolutionChain(speciesUrl: string) {
-//   const [data, setData] = React.useState<EvolutionChain | null>(null);
-//   const [isLoading, setIsLoading] = React.useState(true);
-
-//   React.useEffect(() => {
-//     async function fetchEvolutionChain() {
-//       try {
-//         // First, fetch the species data to get the evolution chain URL
-//         const speciesResponse = await fetch(speciesUrl);
-//         const speciesData = await speciesResponse.json();
-
-//         // Extract the evolution chain ID from the URL
-//         const evolutionUrl = speciesData.evolution_chain.url;
-//         const evolutionId = evolutionUrl.split("/").slice(-2, -1)[0];
-
-//         // Fetch the evolution chain data
-//         const evolutionData = await getEvolutionChain(evolutionId);
-//         setData(evolutionData);
-//       } catch (error) {
-//         console.error("Error fetching evolution chain:", error);
-//       } finally {
-//         setIsLoading(false);
-//       }
-//     }
-
-//     if (speciesUrl) {
-//       fetchEvolutionChain();
-//     }
-//   }, [speciesUrl]);
-
-//   return { data, isLoading };
-// }

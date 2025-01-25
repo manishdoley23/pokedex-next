@@ -10,13 +10,12 @@ interface TypeRelations {
 }
 
 export interface PokemonType {
-  name: string;
-  damage_relations: TypeRelations;
+  slot: number;
+  type: NamedAPIResource;
 }
 
-export interface PokemonTypeEffectiveness {
-  types: {
-    slot: number;
-    type: NamedAPIResource;
-  }[];
+export interface TypeApiResponse {
+  id: number;
+  name: string;
+  damage_relations: TypeRelations;
 }

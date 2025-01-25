@@ -1,22 +1,27 @@
 import { BaseSprites, FrontSetSprites, NamedAPIResource } from "./common";
-import { PokemonType } from "./pokemon-types";
 import { SpriteVersions } from "./sprites";
+import { PokemonType } from "./types";
 
 interface VersionDetail {
   rarity: number;
   version: NamedAPIResource;
 }
 
-interface VersionGroupDetail {
+export interface VersionGroupDetail {
   level_learned_at: number;
   move_learn_method: NamedAPIResource;
   version_group: NamedAPIResource;
 }
 
-interface PokemonAbility {
+export interface PokemonAbility {
   is_hidden: boolean;
   slot: number;
   ability: NamedAPIResource;
+}
+
+export interface PokemonMove {
+  move: NamedAPIResource;
+  version_group_details: VersionGroupDetail[];
 }
 
 export interface PokemonStat {
@@ -51,10 +56,7 @@ export interface PokemonApiResponse {
     version_details: VersionDetail[];
   }>;
   location_area_encounters: string;
-  moves: Array<{
-    move: NamedAPIResource;
-    version_group_details: VersionGroupDetail[];
-  }>;
+  moves: Array<PokemonMove>;
   species: NamedAPIResource;
   sprites: BaseSprites & {
     other: {

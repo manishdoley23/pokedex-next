@@ -19,3 +19,13 @@ const LIGHT_TYPES = [
 export function getTypeTextColor(type: string): string {
   return LIGHT_TYPES.includes(type as PokemonTypesEnum) ? "#000000" : "#FFFFFF";
 }
+export function getPokemonIdFromUrl(url: string): number {
+  const matches = url.match(/\/(\d+)\//);
+  return matches ? parseInt(matches[1]) : 1;
+}
+export function formatName(name: string): string {
+  return name
+    .split("-")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+}

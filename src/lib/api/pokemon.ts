@@ -1,4 +1,6 @@
+import { EvolutionChainApiResponse } from "../types/evolution";
 import { PokemonApiResponse, PokemonListApiResponse } from "../types/pokemon";
+import { TypeApiResponse } from "../types/types";
 import { BASE_URL, _fetch } from "./config";
 
 export async function getPokemonDetails(
@@ -34,12 +36,38 @@ export async function getPokemonById(id: number): Promise<PokemonApiResponse> {
 }
 
 export async function getEvolutionChain(
-  id: number
-): Promise<PokemonEvolutionChainApiResponse> {
+  evolutionChainId: number
+): Promise<EvolutionChainApiResponse> {
   try {
-    return await _fetch(`${BASE_URL}evolution-chain/${id}`);
+    return await _fetch(`${BASE_URL}evolution-chain/${evolutionChainId}`);
   } catch (error) {
     console.error("Error fetching evolution chain:", error);
+    throw error;
+  }
+}
+
+export async function getTypesDataFromId(
+  typeId: number
+): Promise<TypeApiResponse> {
+  try {
+    return await _fetch(`${BASE_URL}type/${typeId}`);
+  } catch (error) {
+    console.error("Error fetching type data:", error);
+    throw error;
+  }
+}
+
+export async function getEvolutionChainIdFromSpecies(
+  speciesId: number
+): Promise<number> {
+  try {
+    const speciesData = await _fetch(`${BASE_URL}pokemon-species/${speciesId}`);
+    const evolutionChainId = speciesData.evolution_chain.url
+      .split("/")
+      .slice(-2, -1)[0];
+    return parseInt(evolutionChainId);
+  } catch (error) {
+    console.error("Error fetching species data:", error);
     throw error;
   }
 }

@@ -1,35 +1,39 @@
-"use client";
-
 import { PokemonStats } from "./pokemon-stats-card";
 
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import Image from "next/image";
-import { PokemonContainerLoadingSkeleton } from "./pokemon-container-loading-skeleton";
-import { usePokemonDetail } from "@/lib/hooks/use-pokemon-hooks";
 import { PokemonEvolutionCard } from "./pokemon-evolution-card";
 import { PokemonTypeEffectiveness } from "./pokemon-type-effectiveness-card";
-import { PokemonMoves } from "./pokemon-moves-card";
-import { cn, getTypeColor, getTypeTextColor } from "@/lib/utils";
+import { PokemonMovesAbilities } from "./pokemon-moves-abilities-card";
+import { getPokemonIdFromUrl } from "@/lib/utils";
+import { PokemonApiResponse } from "@/lib/types/pokemon";
+import { NamedAPIResource } from "@/lib/types/common";
+import {
+  getEvolutionChainIdFromSpecies,
+  getTypesDataFromId,
+} from "@/lib/api/pokemon";
+import { TypeBadge } from "../ui/badge";
 
-export default function PokemonContainer({ pokemonId }: { pokemonId: number }) {
-  const { data: pokemon, isLoading, error } = usePokemonDetail(pokemonId);
+async function getTypesData(types: { slot: number; type: NamedAPIResource }[]) {
+  const typesArray = types.map(async (type) => {
+    const typeId = type.type.url.split("/").slice(-2, -1)[0];
+    return getTypesDataFromId(parseInt(typeId));
+  });
+  return await Promise.all(typesArray);
+}
 
-  if (isLoading) {
-    return <PokemonContainerLoadingSkeleton />;
-  }
+// TODO: Transform the pokemon object into a minimized type
+export default async function PokemonContainer({
+  pokemon,
+}: {
+  pokemon: PokemonApiResponse;
+}) {
+  const speciesId = getPokemonIdFromUrl(pokemon.species.url);
+  const [types, evolutionChainId] = await Promise.all([
+    getTypesData(pokemon.types),
+    getEvolutionChainIdFromSpecies(speciesId),
+  ]);
 
-  if (error || !pokemon) {
-    return (
-      <Alert variant="destructive">
-        <AlertTitle>Error</AlertTitle>
-        <AlertDescription>
-          Failed to load Pokemon details. Please try again later.
-        </AlertDescription>
-      </Alert>
-    );
-  }
-
-  console.log("pokemon", pokemon);
+  console.log("PokemonContainer -> pokemon", pokemon);
 
   return (
     <div className="space-y-8">
@@ -48,16 +52,7 @@ export default function PokemonContainer({ pokemonId }: { pokemonId: number }) {
           <h1 className="text-4xl font-bold capitalize">{pokemon.name}</h1>
           <div className="flex gap-2 mt-2">
             {pokemon.types.map((type) => (
-              <span
-                key={type.type.name}
-                className="px-3 py-1 rounded capitalize text-sm font-medium"
-                style={{
-                  backgroundColor: getTypeColor(type.type.name),
-                  color: getTypeTextColor(type.type.name),
-                }}
-              >
-                {type.type.name}
-              </span>
+              <TypeBadge type={type.type.name} key={type.type.name} />
             ))}
           </div>
         </div>
@@ -74,20 +69,23 @@ export default function PokemonContainer({ pokemonId }: { pokemonId: number }) {
         {/* Type Effectiveness */}
         <div className="bg-white rounded-lg p-6 shadow-sm">
           <h2 className="text-2xl font-semibold mb-4">Type Effectiveness</h2>
-          {/* <PokemonTypeEffectiveness types={pokemon.types} /> */}
+          <PokemonTypeEffectiveness types={types} />
         </div>
 
         {/* Evolution Chain */}
-        {/* <div className="bg-white rounded-lg p-6 shadow-sm">
+        <div className="bg-white rounded-lg p-6 shadow-sm">
           <h2 className="text-2xl font-semibold mb-4">Evolution Chain</h2>
-          <PokemonEvolutionCard pokemonId={pokemon.id} />
-        </div> */}
+          <PokemonEvolutionCard evolutionChainId={evolutionChainId} />
+        </div>
 
-        {/* Moves */}
-        {/* <div className="bg-white rounded-lg p-6 shadow-sm">
+        {/* Moves & Abilites */}
+        <div className="bg-white rounded-lg p-6 shadow-sm">
           <h2 className="text-2xl font-semibold mb-4">Moves</h2>
-          <PokemonMoves moves={pokemon.moves} />
-        </div> */}
+          <PokemonMovesAbilities
+            moves={pokemon.moves}
+            abilities={pokemon.abilities}
+          />
+        </div>
       </div>
     </div>
   );

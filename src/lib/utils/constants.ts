@@ -68,7 +68,7 @@ export enum VersionGenerationGroupEnum {
 }
 
 export const INITIAL_FETCH_LIMIT = 50;
-
+export const MAX_STAT_VALUE = 255;
 export const TYPE_COLORS: Record<PokemonTypesEnum, string> = {
   [PokemonTypesEnum.Normal]: "#A8A878",
   [PokemonTypesEnum.Fire]: "#F08030",
