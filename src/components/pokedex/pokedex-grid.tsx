@@ -1,11 +1,14 @@
 "use client";
 
 import { useEffect, useRef, useCallback, useMemo } from "react";
-import PokemonItem from "./pokedex-item";
+import PokedexItem from "./pokedex-item";
 import { usePokemonInfiniteQuery } from "@/lib/hooks/use-infinite-query-hooks";
 import { INITIAL_FETCH_LIMIT } from "@/lib/utils/constants";
 import { Loader2 } from "lucide-react";
-import Link from "next/link";
+// import Link from "next/link";
+// import { cn, getSelectedPokemonIds } from "@/lib/utils";
+import { useRouter } from "next/navigation";
+import { useTeamStore } from "@/lib/store/team-store";
 
 export default function PokedexGrid({
   searchTerm,
@@ -20,6 +23,15 @@ export default function PokedexGrid({
   selectedAbilities: string[];
   statRanges: Record<string, number>;
 }) {
+  const router = useRouter();
+  const activeTeam = useTeamStore((state) => state.activeTeam);
+  const selectedPokemonIds = useMemo(
+    () =>
+      new Set(
+        activeTeam?.pokemon.filter((p) => p !== null).map((p) => p!.id) || []
+      ),
+    [activeTeam]
+  );
   const observerRef = useRef<IntersectionObserver | null>(null);
   const {
     data,
@@ -169,16 +181,25 @@ export default function PokedexGrid({
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {filteredPokemon.map((pokemon, index) => {
             const isLastPokemon = index === filteredPokemon.length - 1;
-
+            const isSelected = selectedPokemonIds.has(pokemon.id);
             return (
-              <Link href={"/pokedex/" + pokemon.id} key={pokemon.id}>
-                <PokemonItem
+              <div
+                key={pokemon.id}
+                onClick={(e) => {
+                  if (e.detail > 0) {
+                    router.push(`/pokedex/${pokemon.id}`);
+                  }
+                }}
+                className={isSelected ? "pointer-events-none" : ""}
+              >
+                <PokedexItem
                   key={pokemon.id}
                   lastPokemonRef={lastPokemonRef}
                   isLastPokemon={isLastPokemon}
+                  isSelected={isSelected}
                   pokemon={pokemon}
                 />
-              </Link>
+              </div>
             );
           })}
         </div>

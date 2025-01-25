@@ -1,6 +1,7 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { PokemonTypesEnum, TYPE_COLORS } from "./constants";
+import { Team } from "../store/team-store";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -29,3 +30,7 @@ export function formatName(name: string): string {
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ");
 }
+export const getSelectedPokemonIds = (team: Team | null) => {
+  if (!team) return new Set<number>();
+  return new Set(team.pokemon.filter((p) => p !== null).map((p) => p!.id));
+};

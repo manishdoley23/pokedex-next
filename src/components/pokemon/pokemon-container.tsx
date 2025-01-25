@@ -39,15 +39,17 @@ export default async function PokemonContainer({
     <div className="space-y-8">
       {/* Header */}
       <div className="flex items-center gap-6">
-        <div>
-          <Image
-            src={pokemon.sprites.other["official-artwork"].front_default ?? ""}
-            alt={pokemon.name}
-            width={200}
-            height={200}
-            className="rounded-lg"
-          />
-        </div>
+        {pokemon.sprites.other["official-artwork"].front_default && (
+          <div>
+            <Image
+              src={pokemon.sprites.other["official-artwork"].front_default}
+              alt={pokemon.name}
+              width={200}
+              height={200}
+              className="rounded-lg"
+            />
+          </div>
+        )}
         <div>
           <h1 className="text-4xl font-bold capitalize">{pokemon.name}</h1>
           <div className="flex gap-2 mt-2">

@@ -1,3 +1,5 @@
-export default function TeamBuilder() {
-  return <div>Team</div>;
+import TeamBuilder from "@/components/team-builder/team-builder";
+
+export default function TeamBuilderPage() {
+  return <TeamBuilder />;
 }
