@@ -1,11 +1,10 @@
 import { Skeleton } from "@/components/ui/skeleton";
+import { INITIAL_FETCH_LIMIT } from "@/lib/utils/constants";
 
-const LIMIT = 30;
-
-export default function PokedexGridSkeleton() {
+export function PokedexGridSkeleton() {
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-      {Array.from({ length: LIMIT }).map((_, index) => (
+      {Array.from({ length: INITIAL_FETCH_LIMIT }).map((_, index) => (
         <div key={index} className="p-4 border rounded-lg">
           <Skeleton className="h-48 w-full rounded-lg mb-4" />
           <Skeleton className="h-6 w-3/4 mb-2" />

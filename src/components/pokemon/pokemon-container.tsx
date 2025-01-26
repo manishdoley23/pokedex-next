@@ -33,8 +33,6 @@ export default async function PokemonContainer({
     getEvolutionChainIdFromSpecies(speciesId),
   ]);
 
-  console.log("PokemonContainer -> pokemon", pokemon);
-
   return (
     <div className="space-y-8">
       {/* Header */}

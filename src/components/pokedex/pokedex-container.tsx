@@ -2,12 +2,14 @@
 
 import { useState, useCallback } from "react";
 import { SearchAndFilters } from "../search-filters";
-import PokemonGrid from "./pokedex-grid";
 import { PokemonApiResponse } from "@/lib/types/pokemon";
+import PokedexGrid from "./pokedex-grid";
+import { PokemonCardType } from "@/lib/types/common";
 
 export default function PokedexContainer({
-  onPokemonSelect,
+  mode = "pokedex",
 }: {
+  mode: PokemonCardType;
   onPokemonSelect?: (pokemon: PokemonApiResponse) => void;
 }) {
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
@@ -60,13 +62,13 @@ export default function PokedexContainer({
         selectedAbilities={selectedAbilities}
         statRanges={statRanges}
       />
-      <PokemonGrid
+      <PokedexGrid
+        mode={mode}
         searchTerm={searchTerm}
         selectedTypes={selectedTypes}
         selectedGenerations={selectedGenerations}
         selectedAbilities={selectedAbilities}
         statRanges={statRanges}
-        onPokemonSelect={onPokemonSelect}
       />
     </div>
   );

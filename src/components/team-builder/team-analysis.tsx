@@ -1,6 +1,6 @@
 import { TypeBadge } from "../ui/badge";
-import PokedexItem from "../pokedex/pokedex-item";
 import { Team, useTeamStore } from "@/lib/store/team-store";
+import { PokemonBaseCard } from "../cards/pokemon-base-card";
 
 interface TypeEffectiveness {
   [key: string]: number;
@@ -100,7 +100,7 @@ export function TeamAnalysis() {
           {team.pokemon.map((pokemon, index) =>
             pokemon ? (
               <div key={index} className="p-4 border rounded-lg">
-                <PokedexItem pokemon={pokemon} />
+                <PokemonBaseCard pokemon={pokemon} />
               </div>
             ) : null
           )}

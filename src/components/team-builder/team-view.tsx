@@ -1,5 +1,4 @@
 import { PlusCircle, X, Edit2, RotateCcw, Plus } from "lucide-react";
-import PokedexItem from "../pokedex/pokedex-item";
 import { Droppable } from "../ui/droppable";
 import { cn } from "@/lib/utils";
 import { PokemonApiResponse } from "@/lib/types/pokemon";
@@ -8,6 +7,7 @@ import { useState } from "react";
 import { Input } from "../ui/input";
 import TeamCard from "./team-card";
 import { useTeamStore } from "@/lib/store/team-store";
+import { PokemonBaseCard } from "../cards/pokemon-base-card";
 
 export function TeamView({
   onSlotClick,
@@ -19,7 +19,7 @@ export function TeamView({
   const team = useTeamStore((state) => state.activeTeam);
   const { teams, removePokemonFromTeam, updateTeamName, createTeam, reset } =
     useTeamStore();
-  console.log("teams: ", teams);
+
   const [isEditing, setIsEditing] = useState(false);
   const [newName, setNewName] = useState(team?.name || "");
   const slots = Array(6).fill(null);
@@ -65,7 +65,9 @@ export function TeamView({
             </form>
           ) : (
             <>
-              <h2 className="text-xl font-semibold">{team?.name}</h2>
+              <h2 className="text-lg font-semibold whitespace-nowrap">
+                {team?.name}
+              </h2>
               <Button
                 variant="ghost"
                 size="sm"
@@ -79,7 +81,7 @@ export function TeamView({
             </>
           )}
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2 px-2">
           <Button variant="outline" size="sm" onClick={() => reset()}>
             <RotateCcw className="w-4 h-4 mr-1" />
             Reset
@@ -130,7 +132,7 @@ export function TeamView({
                       className="h-full w-full group-hover/item:opacity-50 group-hover/item:pointer-events-none"
                       onClick={() => handleRemovePokemon(index)}
                     >
-                      <PokedexItem
+                      <PokemonBaseCard
                         pokemon={pokemon}
                         className="h-full border-0 hover:scale-100 cursor-pointer"
                       />

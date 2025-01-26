@@ -5,6 +5,8 @@ import {
   getTypesDataFromId,
 } from "../api/pokemon";
 import { NamedAPIResource } from "../types/common";
+import { useContext } from "react";
+import { CompareContext } from "@/components/providers/compare-pokemon-provider";
 
 export function useEvolutionChain(evolutionChainId: number) {
   return useQuery({
@@ -33,3 +35,10 @@ export function useGetPokemonDetails(pokemonId: number) {
     queryFn: () => getPokemonById(pokemonId),
   });
 }
+export const useCompare = () => {
+  const context = useContext(CompareContext);
+  if (!context) {
+    throw new Error("useCompare must be used within CompareProvider");
+  }
+  return context;
+};

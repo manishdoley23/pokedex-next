@@ -13,19 +13,21 @@ import { TeamAnalysis } from "./team-analysis";
 import { Button } from "../ui/button";
 import { ArrowLeft } from "lucide-react";
 import { PokemonApiResponse } from "@/lib/types/pokemon";
-import PokedexItem from "../pokedex/pokedex-item";
 import { useInitializeTeamStore } from "@/lib/store/team-store/team-selectors";
 import { useTeamStore } from "@/lib/store/team-store";
+import { PokemonTeamCard } from "../cards/pokemon-team-card";
+
+type TeamBuilderView = "list" | "analysis";
 
 export default function TeamBuilder() {
   useInitializeTeamStore();
+
   const [activePokemon, setActivePokemon] = useState<PokemonApiResponse | null>(
     null
   );
   const [activeId, setActiveId] = useState<string | null>(null);
-  const [view, setView] = useState<"list" | "analysis">("list");
+  const [view, setView] = useState<TeamBuilderView>("list");
 
-  // Store
   const addPokemonToTeam = useTeamStore((state) => state.addPokemonToTeam);
   const activeTeam = useTeamStore((state) => state.activeTeam);
 
@@ -37,29 +39,19 @@ export default function TeamBuilder() {
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
-
-    if (over && activeTeam) {
-      const pokemonData = active.data?.current?.pokemon;
+    if (over && activeTeam && active.data.current?.pokemon) {
       const slotIndex = parseInt(over.id as string);
-
-      if (pokemonData && !isNaN(slotIndex)) {
-        addPokemonToTeam(activeTeam.id, pokemonData, slotIndex);
+      if (!isNaN(slotIndex)) {
+        addPokemonToTeam(activeTeam.id, active.data.current.pokemon, slotIndex);
       }
     }
-
-    // Reset drag state
     setActiveId(null);
     setActivePokemon(null);
   };
 
   const handleDragCancel = () => {
-    // Reset drag state
     setActiveId(null);
     setActivePokemon(null);
-  };
-
-  const handleSlotClick = () => {
-    setView("list");
   };
 
   return (
@@ -73,10 +65,11 @@ export default function TeamBuilder() {
         <div className="w-1/3 p-4 border-r overflow-y-auto">
           <h2 className="text-2xl font-bold mb-4">Your Team</h2>
           <TeamView
-            onSlotClick={handleSlotClick}
+            onSlotClick={() => setView("list")}
             onAnalyzeClick={() => setView("analysis")}
           />
         </div>
+
         {/* Right side: Pokemon Selector or Analysis */}
         <div className="w-2/3 p-4 h-full overflow-y-auto">
           {view !== "list" && (
@@ -89,23 +82,24 @@ export default function TeamBuilder() {
               Back to Team
             </Button>
           )}
+
           {view === "list" ? (
-            <PokedexContainer />
-          ) : view === "analysis" ? (
+            <PokedexContainer mode="team" />
+          ) : (
             <TeamAnalysis />
-          ) : null}
+          )}
         </div>
       </div>
 
       <DragOverlay>
-        {activePokemon && activeId ? (
+        {activePokemon && activeId && (
           <div className="transform-none cursor-grabbing">
-            <PokedexItem
+            <PokemonTeamCard
               pokemon={activePokemon}
-              className="shadow-xl opacity-85 pointer-events-none"
+              // className="shadow-xl opacity-85 pointer-events-none"
             />
           </div>
-        ) : null}
+        )}
       </DragOverlay>
     </DndContext>
   );

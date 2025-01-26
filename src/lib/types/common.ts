@@ -46,3 +46,4 @@ export type NamedAPIResource = {
   name: string;
   url: string;
 };
+export type PokemonCardType = "team" | "compare" | "pokedex";
