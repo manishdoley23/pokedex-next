@@ -81,3 +81,10 @@ yarn && yarn build && yarn start
 - Virtual list for inifinite scrolling
 - Improved UI/UX (Dark mode)
 - Type transformation to break-down and use individual types for specific use cases
+- Add tests
+
+## Challenges faced
+
+- Decision to segrate what is client side state for zustand and server side state for react query
+- To minimize waterfall along with using nextjs's static params to preload pokemon details
+- To minimize the number of api calls for client side filtering of pokdex
