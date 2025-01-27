@@ -1,4 +1,7 @@
-import { VersionGeneration, VersionGenerationGroup } from "../utils/constants";
+import {
+  VersionGenerationEnum,
+  VersionGenerationGroupEnum,
+} from "../utils/constants";
 import { FrontSetSprites, FullSetSprites, GenerationSprites } from "./common";
 
 type GenISprites = Pick<
@@ -14,49 +17,49 @@ type GenIISprites = Pick<
 type IconSprites = Pick<GenerationSprites, "front_default" | "front_female">;
 
 export interface SpriteVersions {
-  [VersionGeneration.I]: {
-    [VersionGenerationGroup.RedBlue]: GenISprites;
-    [VersionGenerationGroup.Yellow]: GenISprites;
+  [VersionGenerationEnum.I]: {
+    [VersionGenerationGroupEnum.RedBlue]: GenISprites;
+    [VersionGenerationGroupEnum.Yellow]: GenISprites;
   };
 
-  [VersionGeneration.II]: {
-    [VersionGenerationGroup.Crystal]: GenIISprites;
-    [VersionGenerationGroup.Gold]: GenIISprites;
-    [VersionGenerationGroup.Silver]: GenIISprites;
+  [VersionGenerationEnum.II]: {
+    [VersionGenerationGroupEnum.Crystal]: GenIISprites;
+    [VersionGenerationGroupEnum.Gold]: GenIISprites;
+    [VersionGenerationGroupEnum.Silver]: GenIISprites;
   };
 
-  [VersionGeneration.III]: {
-    [VersionGenerationGroup.Emerald]: Pick<
+  [VersionGenerationEnum.III]: {
+    [VersionGenerationGroupEnum.Emerald]: Pick<
       GenerationSprites,
       "front_default" | "front_shiny"
     >;
-    [VersionGenerationGroup.FireredLeafgreen]: GenIISprites;
-    [VersionGenerationGroup.RubySapphire]: GenIISprites;
+    [VersionGenerationGroupEnum.FireredLeafgreen]: GenIISprites;
+    [VersionGenerationGroupEnum.RubySapphire]: GenIISprites;
   };
 
-  [VersionGeneration.IV]: {
-    [VersionGenerationGroup.DiamondPearl]: FullSetSprites;
-    [VersionGenerationGroup.HeartgoldSoulsilver]: FullSetSprites;
-    [VersionGenerationGroup.Platinum]: FullSetSprites;
+  [VersionGenerationEnum.IV]: {
+    [VersionGenerationGroupEnum.DiamondPearl]: FullSetSprites;
+    [VersionGenerationGroupEnum.HeartgoldSoulsilver]: FullSetSprites;
+    [VersionGenerationGroupEnum.Platinum]: FullSetSprites;
   };
 
-  [VersionGeneration.V]: {
-    [VersionGenerationGroup.BlackWhite]: {
-      [VersionGenerationGroup.Animated]: FullSetSprites;
+  [VersionGenerationEnum.V]: {
+    [VersionGenerationGroupEnum.BlackWhite]: {
+      [VersionGenerationGroupEnum.Animated]: FullSetSprites;
     } & FullSetSprites;
   };
 
-  [VersionGeneration.VI]: {
-    [VersionGenerationGroup.OmegarubyAlphasapphire]: FrontSetSprites;
-    [VersionGenerationGroup.XY]: FrontSetSprites;
+  [VersionGenerationEnum.VI]: {
+    [VersionGenerationGroupEnum.OmegarubyAlphasapphire]: FrontSetSprites;
+    [VersionGenerationGroupEnum.XY]: FrontSetSprites;
   };
 
-  [VersionGeneration.VII]: {
-    [VersionGenerationGroup.Icons]: IconSprites;
-    [VersionGenerationGroup.UltraSunUltraMoon]: FrontSetSprites;
+  [VersionGenerationEnum.VII]: {
+    [VersionGenerationGroupEnum.Icons]: IconSprites;
+    [VersionGenerationGroupEnum.UltraSunUltraMoon]: FrontSetSprites;
   };
 
-  [VersionGeneration.VIII]: {
-    [VersionGenerationGroup.Icons]: IconSprites;
+  [VersionGenerationEnum.VIII]: {
+    [VersionGenerationGroupEnum.Icons]: IconSprites;
   };
 }
