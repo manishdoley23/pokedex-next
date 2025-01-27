@@ -2,7 +2,6 @@
 
 import { DndContext, DragOverlay } from "@dnd-kit/core";
 import PokedexContainer from "../pokedex/pokedex-container";
-import { TeamView } from "./team-view";
 import { TeamAnalysis } from "./team-analysis";
 import { Button } from "../ui/button";
 import { ArrowLeft } from "lucide-react";
@@ -12,6 +11,7 @@ import {
   useTeamBuilder,
   useTeamDragDrop,
 } from "@/lib/hooks/use-pokemon-team-hooks";
+import { TeamViewUser } from "./team-view-user";
 
 export default function TeamBuilder() {
   useInitializeTeamStore();
@@ -36,8 +36,7 @@ export default function TeamBuilder() {
       <div className="flex h-[90vh] w-full overflow-hidden flex-col lg:flex-row">
         {/* Left side: Team View */}
         <div className="w-full lg:w-1/3 p-4 border-r overflow-y-auto">
-          <h2 className="text-2xl font-bold mb-4">Your Team</h2>
-          <TeamView
+          <TeamViewUser
             onSlotClick={handleSlotClick}
             onAnalyzeClick={handleAnalyzeClick}
           />
