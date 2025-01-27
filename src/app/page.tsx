@@ -9,9 +9,9 @@ export default function Home() {
         <div className="text-center space-y-4">
           <h1 className="text-4xl sm:text-5xl font-bold mb-4">Pokedex</h1>
           <p className="text-muted-foreground text-lg max-w-2xl">
-            Build, analyze, and share your perfect Pokemon team. Access
-            comprehensive data for all Pokemon, compare stats, and discover
-            winning combinations.
+            Build and analyze your perfect Pokemon team. Access comprehensive
+            data for all Pokemon, compare stats, and discover winning
+            combinations.
           </p>
         </div>
 
