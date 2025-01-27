@@ -7,7 +7,8 @@ import {
   PokemonTypesEnum,
   VersionGenerationEnum,
 } from "@/lib/utils/constants";
-import { TypeBadge } from "./ui/badge";
+import { TypeBadge } from "./badge";
+import { useFocusOnSlash } from "@/lib/hooks/use-ui-hook";
 
 interface SearchAndFiltersProps {
   onSearch: (value: string) => void;
@@ -32,6 +33,8 @@ export function SearchAndFilters({
   selectedAbilities,
   statRanges,
 }: SearchAndFiltersProps) {
+  const searchInputRef = useFocusOnSlash();
+
   const debouncedSearch = debounce((value: string) => {
     onSearch(value);
   }, 300);
@@ -51,6 +54,7 @@ export function SearchAndFilters({
     <>
       <div className="mb-6 relative">
         <input
+          ref={searchInputRef}
           type="text"
           placeholder="Search Pokemon"
           onChange={handleSearchInput}

@@ -1,7 +1,7 @@
 "use client";
 
 import { usePokedexFilters } from "@/lib/hooks/use-pokemon-filter-hooks";
-import { SearchAndFilters } from "../search-filters";
+import { SearchAndFilters } from "../ui/search-filters";
 import PokedexGrid from "./pokedex-grid";
 import { PokemonCardType } from "@/lib/types/common";
 

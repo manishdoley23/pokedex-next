@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { Loader } from "../ui/loader";
+import { useIntersectionObserver } from "@/lib/hooks/use-ui-hook";
 import { usePokemonInfiniteQuery } from "@/lib/hooks/use-infinite-query-hooks";
 import { INITIAL_FETCH_LIMIT } from "@/lib/utils/constants";
 import { useTeamStore } from "@/lib/store/team-store";
@@ -13,7 +14,6 @@ import {
   useSelectedPokemonIds,
   useShouldStopFetching,
 } from "@/lib/hooks/use-pokemon-filter-hooks";
-import { useIntersectionObserver } from "@/lib/hooks/use-intersection-oberver-hook";
 
 type PokedexGridProps = {
   searchTerm: string;

@@ -1,4 +1,31 @@
-import { useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
+
+/**
+ * Hook to focus on search input when '/' key is pressed
+ */
+export function useFocusOnSlash() {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (
+        e.key === "/" &&
+        e.target instanceof HTMLElement &&
+        !["INPUT", "TEXTAREA"].includes(e.target.tagName)
+      ) {
+        e.preventDefault();
+        inputRef.current?.focus();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
+  return inputRef;
+}
 
 /**
  * Hook to handle infinite scrolling through pokemon list
