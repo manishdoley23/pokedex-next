@@ -24,6 +24,7 @@ combinations using the https://pokeapi.co/
 - Zustand
 - TanStack Query
 - Tailwind CSS
+- NextAuth
 
 ### UI Components & Libraries
 
@@ -64,6 +65,7 @@ yarn && yarn build && yarn start
 - Utilized **Zustand** for simple and efficient global state management and **persistance in local storage**
 - Utilized **TanStack Query** as an **async state mangement library** and for it's **caching abilities**
 - Employed **shadcn** for consistent UI components and **accessibility**
+- Used **NextAuth** for team management per user
 
 ---
 

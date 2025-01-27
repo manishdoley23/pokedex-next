@@ -1,25 +1,25 @@
 import { PokemonApiResponse } from "@/lib/types/pokemon";
-import type { TeamState } from "./team-types";
+import type { Team, TeamState } from "./team-types";
+import { DEFAULT_TEAM_NAME } from "@/lib/utils/constants";
 
-const DEFAULT_TEAM_NAME = "My Team";
+const createNewTeam = (name: string, userId: string): Team => ({
+  id: crypto.randomUUID(),
+  name,
+  pokemon: Array(6).fill(null),
+  userId,
+  createdAt: new Date(),
+  updatedAt: new Date(),
+});
 
-/**
- * Team management actions for pokemon-team-store
- */
 export const createTeamActions = (
   set: (fn: (state: TeamState) => Partial<TeamState>) => void
 ) => ({
-  /**
-   * Initializes store with default team if empty
-   */
   initializeStore: () =>
     set((state) => {
+      if (!state.currentUserId) return {};
+
       if (state.teams.length === 0) {
-        const newTeam = {
-          id: crypto.randomUUID(),
-          name: DEFAULT_TEAM_NAME,
-          pokemon: Array(6).fill(null),
-        };
+        const newTeam = createNewTeam(DEFAULT_TEAM_NAME, state.currentUserId);
         return {
           teams: [newTeam],
           activeTeam: newTeam,
@@ -33,25 +33,18 @@ export const createTeamActions = (
       return {};
     }),
 
-  /**
-   * Creates new team with given name
-   */
   createTeam: (name: string = DEFAULT_TEAM_NAME) =>
     set((state) => {
-      const newTeam = {
-        id: crypto.randomUUID(),
-        name,
-        pokemon: Array(6).fill(null),
-      };
+      if (!state.currentUserId) return {};
+
+      const newTeam = createNewTeam(name, state.currentUserId);
+
       return {
         teams: [...state.teams, newTeam],
         activeTeam: newTeam,
       };
     }),
 
-  /**
-   * Deletes team by ID
-   */
   deleteTeam: (id: string) =>
     set((state) => {
       const updatedTeams = state.teams.filter((team) => team.id !== id);
@@ -64,9 +57,6 @@ export const createTeamActions = (
       };
     }),
 
-  /**
-   * Adds Pokemon to specific team slot
-   */
   addPokemonToTeam: (
     teamId: string,
     pokemon: PokemonApiResponse,
@@ -78,10 +68,12 @@ export const createTeamActions = (
           ? {
               ...team,
               pokemon: Object.assign([...team.pokemon], { [slot]: pokemon }),
+              updatedAt: new Date(),
             }
           : team
       );
       const updatedTeam = updatedTeams.find((team) => team.id === teamId);
+
       return {
         teams: updatedTeams,
         activeTeam:
@@ -91,9 +83,6 @@ export const createTeamActions = (
       };
     }),
 
-  /**
-   * Removes Pokemon from team slot
-   */
   removePokemonFromTeam: (teamId: string, slot: number) =>
     set((state) => {
       const updatedTeams = state.teams.map((team) =>
@@ -101,10 +90,12 @@ export const createTeamActions = (
           ? {
               ...team,
               pokemon: Object.assign([...team.pokemon], { [slot]: null }),
+              updatedAt: new Date(),
             }
           : team
       );
       const updatedTeam = updatedTeams.find((team) => team.id === teamId);
+
       return {
         teams: updatedTeams,
         activeTeam:
@@ -114,18 +105,12 @@ export const createTeamActions = (
       };
     }),
 
-  /**
-   * Sets active team by ID
-   */
   setActiveTeam: (teamId: string) =>
     set((state) => ({
       activeTeam:
         state.teams.find((team) => team.id === teamId) || state.activeTeam,
     })),
 
-  /**
-   * Updates team name
-   */
   updateTeamName: (teamId: string, name: string) =>
     set((state) => {
       const updatedTeams = state.teams.map((team) =>
@@ -133,10 +118,12 @@ export const createTeamActions = (
           ? {
               ...team,
               name,
+              updatedAt: new Date(),
             }
           : team
       );
       const updatedTeam = updatedTeams.find((team) => team.id === teamId);
+
       return {
         teams: updatedTeams,
         activeTeam:
@@ -146,12 +133,32 @@ export const createTeamActions = (
       };
     }),
 
-  /**
-   * Resets store to initial state
-   */
+  setUser: (session: { user?: { email?: string | null } } | null) =>
+    set((state) => ({
+      currentUserId: session?.user?.email || null,
+      teams: session?.user?.email
+        ? state.userTeams[session.user.email] || []
+        : [],
+      activeTeam: null,
+    })),
+
+  syncTeams: () =>
+    set((state) => {
+      if (!state.currentUserId) return {};
+
+      return {
+        userTeams: {
+          ...state.userTeams,
+          [state.currentUserId]: state.teams,
+        },
+      };
+    }),
+
   reset: () =>
     set(() => ({
       teams: [],
       activeTeam: null,
+      userTeams: {},
+      currentUserId: null,
     })),
 });
