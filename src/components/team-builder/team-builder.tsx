@@ -35,7 +35,7 @@ export default function TeamBuilder() {
     >
       <div className="flex h-[90vh] w-full overflow-hidden flex-col lg:flex-row">
         {/* Left side: Team View */}
-        <div className="w-full lg:w-1/3 p-4 border-r overflow-y-auto">
+        <div className="w-full border-b-2 border-black lg:border-b-0 lg:w-1/3 p-4 border-r overflow-y-auto">
           <TeamViewUser
             onSlotClick={handleSlotClick}
             onAnalyzeClick={handleAnalyzeClick}
