@@ -8,6 +8,9 @@ export const initialState: TeamState = {
   teams: [],
 } as const;
 
+/**
+ * Pokemon team store
+ */
 export const useTeamStore = create<TeamStore>()(
   devtools(
     persist(
@@ -16,7 +19,7 @@ export const useTeamStore = create<TeamStore>()(
         ...createTeamActions(set),
       }),
       {
-        name: "pokemon-teams-store",
+        name: "pokemon-team-store",
       }
     ),
     {

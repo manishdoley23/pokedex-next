@@ -2,10 +2,12 @@
 
 import { debounce } from "lodash";
 import {
-  PokemonAbilityEnum,
+  PokemonCommonAbilitiesEnum,
   PokemonStatsEnum,
+  PokemonTypesEnum,
   VersionGenerationEnum,
 } from "@/lib/utils/constants";
+import { TypeBadge } from "./ui/badge";
 
 interface SearchAndFiltersProps {
   onSearch: (value: string) => void;
@@ -63,18 +65,17 @@ export function SearchAndFilters({
           <div className="flex flex-col gap-2">
             <p className="font-semibold">Types:</p>
             <div className="flex flex-wrap gap-2">
-              {["grass", "fire", "water", "electric", "psychic"].map((type) => (
+              {Object.values(PokemonTypesEnum).map((type) => (
                 <button
                   key={type}
                   onClick={() => onTypeFilter(type)}
-                  className={`px-4 py-2 rounded text-black transition-colors
-                    ${
-                      selectedTypes.includes(type)
-                        ? "bg-blue-500 text-white"
-                        : "bg-gray-200 hover:bg-gray-300"
-                    }`}
+                  className={`transition-all ${
+                    selectedTypes.includes(type)
+                      ? "opacity-100 scale-110"
+                      : "opacity-50 hover:opacity-75 hover:scale-105"
+                  }`}
                 >
-                  {type}
+                  <TypeBadge type={type} />
                 </button>
               ))}
             </div>
@@ -130,7 +131,7 @@ export function SearchAndFilters({
           <div className="flex flex-col gap-2">
             <p className="font-semibold">Common Abilities:</p>
             <div className="flex flex-wrap gap-2">
-              {Object.values(PokemonAbilityEnum).map((ability) => (
+              {Object.values(PokemonCommonAbilitiesEnum).map((ability) => (
                 <button
                   key={ability}
                   onClick={() => onAbilityFilter(ability)}

@@ -13,68 +13,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { formatName } from "@/lib/utils";
-
-const AbilityTag = ({
-  ability,
-  isHidden,
-}: {
-  ability: string;
-  isHidden: boolean;
-}) => (
-  <TooltipProvider>
-    <Tooltip>
-      <TooltipTrigger>
-        <Badge
-          variant={isHidden ? "secondary" : "default"}
-          className="mr-2 mb-2"
-        >
-          {formatName(ability)}
-        </Badge>
-      </TooltipTrigger>
-      <TooltipContent>
-        <p>{isHidden ? "Hidden Ability" : "Regular Ability"}</p>
-      </TooltipContent>
-    </Tooltip>
-  </TooltipProvider>
-);
-
-const MoveTag = ({
-  move,
-  detail,
-}: {
-  move: string;
-  detail: VersionGroupDetail;
-}) => (
-  <TooltipProvider>
-    <Tooltip>
-      <TooltipTrigger>
-        <Badge variant="outline" className="mr-2 mb-2">
-          {formatName(move)}
-        </Badge>
-      </TooltipTrigger>
-      <TooltipContent>
-        <div className="text-sm">
-          <p>Learn method: {formatName(detail.move_learn_method.name)}</p>
-          {detail.level_learned_at > 0 && (
-            <p>Level: {detail.level_learned_at}</p>
-          )}
-        </div>
-      </TooltipContent>
-    </Tooltip>
-  </TooltipProvider>
-);
-
-function groupMovesByMethod(moves: PokemonMove[]) {
-  return moves.reduce((acc, move) => {
-    const detail = move.version_group_details[0];
-    const method = detail.move_learn_method.name;
-    if (!acc[method]) {
-      acc[method] = [];
-    }
-    acc[method].push({ move: move.move.name, detail });
-    return acc;
-  }, {} as Record<string, Array<{ move: string; detail: VersionGroupDetail }>>);
-}
+import { groupMovesByMethod } from "@/lib/utils/pokemon-utils";
 
 export function PokemonMovesAbilities({
   moves,
@@ -143,3 +82,53 @@ export function PokemonMovesAbilities({
     </div>
   );
 }
+
+const AbilityTag = ({
+  ability,
+  isHidden,
+}: {
+  ability: string;
+  isHidden: boolean;
+}) => (
+  <TooltipProvider>
+    <Tooltip>
+      <TooltipTrigger>
+        <Badge
+          variant={isHidden ? "secondary" : "default"}
+          className="mr-2 mb-2"
+        >
+          {formatName(ability)}
+        </Badge>
+      </TooltipTrigger>
+      <TooltipContent>
+        <p>{isHidden ? "Hidden Ability" : "Regular Ability"}</p>
+      </TooltipContent>
+    </Tooltip>
+  </TooltipProvider>
+);
+
+const MoveTag = ({
+  move,
+  detail,
+}: {
+  move: string;
+  detail: VersionGroupDetail;
+}) => (
+  <TooltipProvider>
+    <Tooltip>
+      <TooltipTrigger>
+        <Badge variant="outline" className="mr-2 mb-2">
+          {formatName(move)}
+        </Badge>
+      </TooltipTrigger>
+      <TooltipContent>
+        <div className="text-sm">
+          <p>Learn method: {formatName(detail.move_learn_method.name)}</p>
+          {detail.level_learned_at > 0 && (
+            <p>Level: {detail.level_learned_at}</p>
+          )}
+        </div>
+      </TooltipContent>
+    </Tooltip>
+  </TooltipProvider>
+);

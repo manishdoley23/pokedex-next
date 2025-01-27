@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { Team, useTeamStore } from "@/lib/store/team-store";
 
-export default function TeamCard({ team }: { team: Team }) {
+export function TeamCard({ team }: { team: Team }) {
   const { setActiveTeam, deleteTeam } = useTeamStore();
   const activeTeam = useTeamStore((state) => state.activeTeam);
 

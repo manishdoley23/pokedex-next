@@ -8,16 +8,35 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { MAX_STAT_VALUE, PokemonStatsEnum } from "@/lib/utils/constants";
+import {
+  MAX_STAT_VALUE,
+  PokemonStatsEnum,
+  STAT_DISPLAY_NAMES,
+} from "@/lib/utils/constants";
 
-const STAT_DISPLAY_NAMES: Record<PokemonStatsEnum, string> = {
-  [PokemonStatsEnum.Hp]: "HP",
-  [PokemonStatsEnum.Attack]: "Attack",
-  [PokemonStatsEnum.Defense]: "Defense",
-  [PokemonStatsEnum.SpecialAttack]: "Sp. Attack",
-  [PokemonStatsEnum.SpecialDefence]: "Sp. Defense",
-  [PokemonStatsEnum.Speed]: "Speed",
-};
+export function PokemonStats({ stats }: { stats: PokemonStat[] }) {
+  const totalStats = stats.reduce((sum, stat) => sum + stat.base_stat, 0);
+
+  return (
+    <Card>
+      <CardHeader className="pb-3">
+        <CardTitle className="text-lg font-medium flex justify-between items-center">
+          Base Stats
+          <span className="text-sm text-muted-foreground">
+            Total: {totalStats}
+          </span>
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-4">
+          {stats.map((stat) => (
+            <StatRow key={stat.stat.name} stat={stat} />
+          ))}
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
 
 function StatRow({ stat }: { stat: PokemonStat }) {
   const percentage = (stat.base_stat / MAX_STAT_VALUE) * 100;
@@ -51,29 +70,5 @@ function StatRow({ stat }: { stat: PokemonStat }) {
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
-  );
-}
-
-export function PokemonStats({ stats }: { stats: PokemonStat[] }) {
-  const totalStats = stats.reduce((sum, stat) => sum + stat.base_stat, 0);
-
-  return (
-    <Card>
-      <CardHeader className="pb-3">
-        <CardTitle className="text-lg font-medium flex justify-between items-center">
-          Base Stats
-          <span className="text-sm text-muted-foreground">
-            Total: {totalStats}
-          </span>
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-4">
-          {stats.map((stat) => (
-            <StatRow key={stat.stat.name} stat={stat} />
-          ))}
-        </div>
-      </CardContent>
-    </Card>
   );
 }

@@ -1,4 +1,4 @@
-import PokemonContainer from "@/components/pokedex/pokedex-container";
+import PokedexContainer from "@/components/pokedex/pokedex-container";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { getQueryClient } from "@/lib/utils/get-query-client";
 import { INITIAL_FETCH_LIMIT } from "@/lib/utils/constants";
@@ -14,12 +14,13 @@ export default async function PokedexPage() {
     initialPageParam: 0,
     getNextPageParam: (lastPage: PokemonListServiceDTO) =>
       lastPage.hasMore ? lastPage.nextOffset : undefined,
+    staleTime: 5 * 60 * 1000,
   });
 
   return (
     <main className="min-h-screen">
       <HydrationBoundary state={dehydrate(queryClient)}>
-        <PokemonContainer />
+        <PokedexContainer mode="pokedex" />
       </HydrationBoundary>
     </main>
   );

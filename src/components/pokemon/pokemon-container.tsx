@@ -1,6 +1,6 @@
-import { PokemonStats } from "./pokemon-stats-card";
-
 import Image from "next/image";
+
+import { PokemonStats } from "./pokemon-stats-card";
 import { PokemonEvolutionCard } from "./pokemon-evolution-card";
 import { PokemonTypeEffectiveness } from "./pokemon-type-effectiveness-card";
 import { PokemonMovesAbilities } from "./pokemon-moves-abilities-card";

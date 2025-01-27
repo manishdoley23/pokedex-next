@@ -1,66 +1,7 @@
 import { TypeBadge } from "../ui/badge";
-import { Team, useTeamStore } from "@/lib/store/team-store";
-import { PokemonBaseCard } from "../cards/pokemon-base-card";
-
-interface TypeEffectiveness {
-  [key: string]: number;
-}
-
-function analyzeTeam(team: Team) {
-  const typeChart: {
-    [key: string]: { weakTo: string[]; resistantTo: string[] };
-  } = {
-    normal: { weakTo: ["fighting"], resistantTo: [] },
-    fire: {
-      weakTo: ["water", "ground", "rock"],
-      resistantTo: ["fire", "grass", "ice", "bug", "steel"],
-    },
-    water: {
-      weakTo: ["electric", "grass"],
-      resistantTo: ["fire", "water", "ice", "steel"],
-    },
-    // TODO: Add other types
-  };
-
-  const teamTypes = new Set<string>();
-  const effectiveness: TypeEffectiveness = {};
-
-  // Initialize effectiveness for all types
-  Object.keys(typeChart).forEach((type) => {
-    effectiveness[type] = 1;
-  });
-
-  // Analyze each Pokemon
-  team.pokemon.forEach((pokemon) => {
-    if (!pokemon) return;
-
-    // Add to team type coverage
-    pokemon.types.forEach((t) => teamTypes.add(t.type.name));
-
-    // Calculate effectiveness
-    pokemon.types.forEach((t) => {
-      const type = t.type.name;
-      if (typeChart[type]) {
-        typeChart[type].weakTo.forEach((weakType) => {
-          effectiveness[weakType] = (effectiveness[weakType] || 1) * 2;
-        });
-        typeChart[type].resistantTo.forEach((resistType) => {
-          effectiveness[resistType] = (effectiveness[resistType] || 1) * 0.5;
-        });
-      }
-    });
-  });
-
-  // Find weaknesses (types that deal >1x damage)
-  const weaknesses = Object.entries(effectiveness)
-    .filter(([, value]) => value > 1)
-    .map(([type]) => type);
-
-  return {
-    coverage: Array.from(teamTypes),
-    weaknesses,
-  };
-}
+import { useTeamStore } from "@/lib/store/team-store";
+import { PokemonBaseCard } from "../pokemon/cards/pokemon-base-card";
+import { analyzeTeam } from "@/lib/utils/pokemon-team-utils";
 
 export function TeamAnalysis() {
   const team = useTeamStore((state) => state.activeTeam);

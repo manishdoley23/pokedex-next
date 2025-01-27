@@ -3,6 +3,9 @@ import { PokemonApiResponse, PokemonListApiResponse } from "../types/pokemon";
 import { TypeApiResponse } from "../types/types";
 import { BASE_URL, _fetch } from "./config";
 
+/**
+ * Fetches Pokemon details by URL
+ */
 export async function getPokemonDetails(
   url: string
 ): Promise<PokemonApiResponse> {
@@ -14,6 +17,9 @@ export async function getPokemonDetails(
   }
 }
 
+/**
+ * Fetches paginated Pokemon list
+ */
 export async function getPokemonList(
   limit: number,
   offset: number
@@ -26,6 +32,9 @@ export async function getPokemonList(
   }
 }
 
+/**
+ * Fetches Pokemon details by ID
+ */
 export async function getPokemonById(id: number): Promise<PokemonApiResponse> {
   try {
     return await _fetch(`${BASE_URL}pokemon/${id}`);
@@ -35,6 +44,9 @@ export async function getPokemonById(id: number): Promise<PokemonApiResponse> {
   }
 }
 
+/**
+ * Fetches evolution chain by ID
+ */
 export async function getEvolutionChain(
   evolutionChainId: number
 ): Promise<EvolutionChainApiResponse> {
@@ -46,6 +58,9 @@ export async function getEvolutionChain(
   }
 }
 
+/**
+ * Fetches type data by ID
+ */
 export async function getTypesDataFromId(
   typeId: number
 ): Promise<TypeApiResponse> {
@@ -57,6 +72,9 @@ export async function getTypesDataFromId(
   }
 }
 
+/**
+ * Gets evolution chain ID from species ID
+ */
 export async function getEvolutionChainIdFromSpecies(
   speciesId: number
 ): Promise<number> {

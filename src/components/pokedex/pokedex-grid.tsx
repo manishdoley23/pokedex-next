@@ -1,13 +1,19 @@
-import { useEffect, useRef, useCallback, useMemo } from "react";
-import { Loader2 } from "lucide-react";
+import { useEffect } from "react";
+import { Loader } from "../ui/loader";
 import { usePokemonInfiniteQuery } from "@/lib/hooks/use-infinite-query-hooks";
 import { INITIAL_FETCH_LIMIT } from "@/lib/utils/constants";
 import { useTeamStore } from "@/lib/store/team-store";
 import type { PokemonApiResponse } from "@/lib/types/pokemon";
-import { PokemonTeamCard } from "../cards/pokemon-team-card";
-import { PokemonCompareCard } from "../cards/pokemon-compare-card";
-import { PokemonPokedexCard } from "../cards/pokemon-pokedex-card";
+import { PokemonTeamCard } from "../pokemon/cards/pokemon-team-card";
+import { PokemonCompareCard } from "../pokemon/cards/pokemon-compare-card";
+import { PokemonPokedexCard } from "../pokemon/cards/pokemon-pokedex-card";
 import { PokemonCardType } from "@/lib/types/common";
+import {
+  useFilteredPokemon,
+  useSelectedPokemonIds,
+  useShouldStopFetching,
+} from "@/lib/hooks/use-pokemon-filter-hooks";
+import { useIntersectionObserver } from "@/lib/hooks/use-intersection-oberver-hook";
 
 interface PokedexGridProps {
   searchTerm: string;
@@ -27,7 +33,6 @@ export default function PokedexGrid({
   mode = "pokedex",
 }: PokedexGridProps) {
   const activeTeam = useTeamStore((state) => state.activeTeam);
-  const observerRef = useRef<IntersectionObserver | null>(null);
 
   const {
     data,
@@ -39,90 +44,28 @@ export default function PokedexGrid({
     refetch,
   } = usePokemonInfiniteQuery(INITIAL_FETCH_LIMIT);
 
-  const selectedPokemonIds = useMemo(
-    () => new Set(activeTeam?.pokemon.filter(Boolean).map((p) => p!.id) || []),
-    [activeTeam]
+  const filteredPokemon = useFilteredPokemon(data, {
+    searchTerm,
+    selectedTypes,
+    selectedGenerations,
+    selectedAbilities,
+    statRanges,
+  });
+
+  const selectedPokemonIds = useSelectedPokemonIds(activeTeam);
+
+  const shouldStopFetching = useShouldStopFetching(
+    data,
+    searchTerm,
+    selectedTypes
   );
 
-  const filteredPokemon = useMemo(
-    () =>
-      data?.pages.flatMap((page) =>
-        page.pokemons.filter((pokemon) => {
-          const matchesSearch =
-            !searchTerm ||
-            pokemon.name.toLowerCase().includes(searchTerm.toLowerCase());
-          const matchesType =
-            selectedTypes.length === 0 ||
-            pokemon.types.some((t) => selectedTypes.includes(t.type.name));
-          const matchesGeneration =
-            selectedGenerations.length === 0 ||
-            pokemon.past_types.some((pt) =>
-              selectedGenerations.includes(pt.generation.name)
-            );
-          const matchesAbility =
-            selectedAbilities.length === 0 ||
-            pokemon.abilities.some((a) =>
-              selectedAbilities.includes(a.ability.name)
-            );
-          const matchesStats = Object.entries(statRanges).every(
-            ([stat, min]) =>
-              (pokemon.stats.find((s) => s.stat.name === stat)?.base_stat ||
-                0) >= min
-          );
-
-          return (
-            matchesSearch &&
-            matchesType &&
-            matchesGeneration &&
-            matchesAbility &&
-            matchesStats
-          );
-        })
-      ) ?? [],
-    [
-      data,
-      searchTerm,
-      selectedTypes,
-      selectedGenerations,
-      selectedAbilities,
-      statRanges,
-    ]
-  );
-
-  // Track if we should stop fetching
-  const shouldStopFetching = useMemo(() => {
-    const currentPagePokemons =
-      data?.pages[data.pages.length - 1]?.pokemons || [];
-    const filteredCurrentPage = currentPagePokemons.filter((pokemon) => {
-      const matchesSearch =
-        !searchTerm ||
-        pokemon.name.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesType =
-        selectedTypes.length === 0 ||
-        pokemon.types.some((type) => selectedTypes.includes(type.type.name));
-      return matchesSearch && matchesType;
-    });
-
-    return filteredCurrentPage.length === 0;
-  }, [data?.pages, searchTerm, selectedTypes]);
-
-  const lastPokemonRef = useCallback(
-    (node: HTMLDivElement | null) => {
-      if (observerRef.current) observerRef.current.disconnect();
-      observerRef.current = new IntersectionObserver((entries) => {
-        if (
-          entries[0].isIntersecting &&
-          hasNextPage &&
-          !isFetchingNextPage &&
-          !shouldStopFetching
-        ) {
-          fetchNextPage();
-        }
-      });
-      if (node) observerRef.current.observe(node);
-    },
-    [fetchNextPage, hasNextPage, isFetchingNextPage, shouldStopFetching]
-  );
+  const { lastPokemonRef } = useIntersectionObserver({
+    hasNextPage,
+    isFetchingNextPage,
+    shouldStopFetching,
+    fetchNextPage,
+  });
 
   useEffect(() => {
     if (
@@ -186,10 +129,9 @@ export default function PokedexGrid({
           {filteredPokemon.map(renderPokemonCard)}
         </div>
       )}
-
       {isFetchingNextPage && (
-        <div className="text-center mt-4">
-          <Loader2 className="animate-spin" />
+        <div className="flex w-full justify-center">
+          <Loader />
         </div>
       )}
     </>

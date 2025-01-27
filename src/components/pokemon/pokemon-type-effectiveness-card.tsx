@@ -2,87 +2,7 @@ import React from "react";
 import { TypeApiResponse } from "@/lib/types/types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TypeBadge } from "../ui/badge";
-
-interface EffectivenessMap {
-  [key: string]: number;
-}
-
-function calculateTypeEffectiveness(types: TypeApiResponse[]): {
-  weaknesses: EffectivenessMap;
-  resistances: EffectivenessMap;
-  immunities: string[];
-} {
-  const weaknesses: EffectivenessMap = {};
-  const resistances: EffectivenessMap = {};
-  const immunities: string[] = [];
-
-  types.forEach((type) => {
-    type.damage_relations.double_damage_from.forEach((relation) => {
-      weaknesses[relation.name] = (weaknesses[relation.name] || 1) * 2;
-    });
-
-    type.damage_relations.half_damage_from.forEach((relation) => {
-      resistances[relation.name] = (resistances[relation.name] || 1) * 0.5;
-    });
-
-    type.damage_relations.no_damage_from.forEach((relation) => {
-      immunities.push(relation.name);
-    });
-  });
-
-  Object.keys(weaknesses).forEach((type) => {
-    if (resistances[type]) {
-      const effectiveness = weaknesses[type] * resistances[type];
-      if (effectiveness === 1) {
-        delete weaknesses[type];
-        delete resistances[type];
-      } else if (effectiveness > 1) {
-        weaknesses[type] = effectiveness;
-        delete resistances[type];
-      } else {
-        resistances[type] = effectiveness;
-        delete weaknesses[type];
-      }
-    }
-  });
-
-  immunities.forEach((type) => {
-    delete weaknesses[type];
-    delete resistances[type];
-  });
-
-  return { weaknesses, resistances, immunities };
-}
-
-function EffectivenessSection({
-  title,
-  types,
-  effectiveness,
-}: {
-  title: string;
-  types: string[];
-  effectiveness?: number;
-}) {
-  if (!types.length) return null;
-
-  return (
-    <div className="mb-4">
-      <h3 className="text-sm font-medium mb-2 flex items-center gap-2">
-        {title}
-        {effectiveness && (
-          <span className="text-xs text-muted-foreground">
-            ({effectiveness}×)
-          </span>
-        )}
-      </h3>
-      <div className="flex flex-wrap gap-2">
-        {types.map((type) => (
-          <TypeBadge key={type} type={type} />
-        ))}
-      </div>
-    </div>
-  );
-}
+import { calculateTypeEffectiveness } from "@/lib/utils/pokemon-utils";
 
 export function PokemonTypeEffectiveness({
   types,
@@ -190,5 +110,35 @@ export function PokemonTypeEffectiveness({
         </div>
       </CardContent>
     </Card>
+  );
+}
+
+function EffectivenessSection({
+  title,
+  types,
+  effectiveness,
+}: {
+  title: string;
+  types: string[];
+  effectiveness?: number;
+}) {
+  if (!types.length) return null;
+
+  return (
+    <div className="mb-4">
+      <h3 className="text-sm font-medium mb-2 flex items-center gap-2">
+        {title}
+        {effectiveness && (
+          <span className="text-xs text-muted-foreground">
+            ({effectiveness}×)
+          </span>
+        )}
+      </h3>
+      <div className="flex flex-wrap gap-2">
+        {types.map((type) => (
+          <TypeBadge key={type} type={type} />
+        ))}
+      </div>
+    </div>
   );
 }
