@@ -6,7 +6,7 @@ import {
 } from "../api/pokemon";
 import { NamedAPIResource } from "../types/common";
 import { useContext } from "react";
-import { CompareContext } from "@/components/providers/compare-pokemon-provider";
+import { CompareContext } from "@/providers/compare-pokemon-provider";
 
 /**
  * Hook to fetch evolution chain data for a pokemon

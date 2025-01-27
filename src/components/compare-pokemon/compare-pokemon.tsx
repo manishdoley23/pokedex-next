@@ -1,5 +1,5 @@
 import PokedexContainer from "../pokedex/pokedex-container";
-import { CompareProvider } from "../providers/compare-pokemon-provider";
+import { CompareProvider } from "../../providers/compare-pokemon-provider";
 import { ComparePokemonView } from "./compare-pokemon-view";
 
 export default function ComparePokemon() {
