@@ -4,7 +4,9 @@ export default function Navbar() {
   return (
     <nav className="w-full px-2 lg:px-10">
       <div className="container mx-auto flex items-center justify-between py-6">
-        <div className="text-lg font-bold lg:text-2xl">Pokedex</div>
+        <Link href="/">
+          <div className="text-lg font-bold lg:text-2xl">Pokedex</div>
+        </Link>
         <div className="flex gap-3 lg:gap-6">
           <Link href="/" className="text-xs lg:text-lg font-semibold">
             Home

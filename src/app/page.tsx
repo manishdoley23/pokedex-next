@@ -10,7 +10,7 @@ export default function Home() {
           <h1 className="text-4xl sm:text-5xl font-bold mb-4">Pokedex</h1>
           <p className="text-muted-foreground text-lg max-w-2xl">
             Build, analyze, and share your perfect Pokemon team. Access
-            comprehensive data for all Pokémon, compare stats, and discover
+            comprehensive data for all Pokemon, compare stats, and discover
             winning combinations.
           </p>
         </div>
@@ -23,7 +23,7 @@ export default function Home() {
             <Search className="w-10 h-10 mb-4" />
             <h2 className="text-xl font-semibold mb-2">Pokedex</h2>
             <p className="text-sm text-muted-foreground text-center">
-              Browse and search through all Pokémon with detailed information
+              Browse and search through all Pokemon with detailed information
             </p>
           </Link>
 
@@ -45,7 +45,7 @@ export default function Home() {
             <Database className="w-10 h-10 mb-4" />
             <h2 className="text-xl font-semibold mb-2">Compare</h2>
             <p className="text-sm text-muted-foreground text-center">
-              Compare stats and abilities between different Pokémon
+              Compare stats and abilities between different Pokemon
             </p>
           </Link>
         </div>
