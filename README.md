@@ -1,36 +1,81 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Pokedex
+
+#### Website Link: https://pokedex-next-topaz.vercel.app/
+
+Build and analyze your perfect Pokemon team. Access comprehensive
+data for all Pokemon, compare stats, and discover winning
+combinations using the https://pokeapi.co/
+
+## Features
+
+- **Pokedex**: Browse and search through all pokemon with detailed information
+- **Team Builder**: Create and analyze team compositions
+- **Compare Tool**: Compare stats and abilities between different pokemon
+- **Advanced Filtering**: Filter pokemon by type, generation, abilities, and stats
+- **Team Analysis**: Get insights on team strengths, weaknesses, and type coverage
+- **Responsive Design**: Full mobile and desktop support
+
+## Tech Stack
+
+### Core Technologies
+
+- TypeScript
+- Next.js 15
+- Zustand
+- TanStack Query
+- Tailwind CSS
+
+### UI Components & Libraries
+
+- Shadcn
+- Recharts
+- DND Kit
+
+### Package Manager
+
+- Yarn
 
 ## Getting Started
 
-First, run the development server:
+1. **Clone the repository**
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/yourusername/pokemon-team-builder.git
+
+cd pokemon-team-builder
+
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. **Development server**
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+yarn && yarn dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+3. **Build and start for production**
 
-## Learn More
+```
+yarn && yarn build && yarn start
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Development Decisions
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Utilized **Nextjs** for server-side rendering and **optimal performance**
+- Utilized **Zustand** for simple and efficient global state management and **persistance in local storage**
+- Utilized **TanStack Query** as an **async state mangement library** and for it's **caching abilities**
+- Employed **shadcn** for consistent UI components and **accessibility**
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## Known Issues
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Type effectiveness calculation might show incorrect values for certain dual-type Pokemon
+- Image loading can be optimized
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## Future Improvements
+
+- Virtual list for inifinite scrolling
+- Improved UI/UX (Dark mode)
+- Type transformation to break-down and use individual types for specific use cases
