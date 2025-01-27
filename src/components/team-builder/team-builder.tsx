@@ -33,9 +33,9 @@ export default function TeamBuilder() {
       onDragEnd={handleDragEnd}
       onDragCancel={handleDragCancel}
     >
-      <div className="flex h-[90vh] overflow-hidden">
+      <div className="flex h-[90vh] w-full overflow-hidden flex-col lg:flex-row">
         {/* Left side: Team View */}
-        <div className="w-1/3 p-4 border-r overflow-y-auto">
+        <div className="w-full lg:w-1/3 p-4 border-r overflow-y-auto">
           <h2 className="text-2xl font-bold mb-4">Your Team</h2>
           <TeamView
             onSlotClick={handleSlotClick}
@@ -44,7 +44,7 @@ export default function TeamBuilder() {
         </div>
 
         {/* Right side: Pokemon Selector or Analysis */}
-        <div className="w-2/3 p-4 h-full overflow-y-auto">
+        <div className="w-full lg:w-2/3 p-4 h-full overflow-y-auto">
           {view !== "list" && (
             <Button variant="ghost" className="mb-4" onClick={handleBackToList}>
               <ArrowLeft className="w-4 h-4 mr-2" />

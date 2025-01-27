@@ -15,14 +15,14 @@ import {
 } from "@/lib/hooks/use-pokemon-filter-hooks";
 import { useIntersectionObserver } from "@/lib/hooks/use-intersection-oberver-hook";
 
-interface PokedexGridProps {
+type PokedexGridProps = {
   searchTerm: string;
   selectedTypes: string[];
   selectedGenerations: string[];
   selectedAbilities: string[];
   statRanges: Record<string, number>;
   mode: PokemonCardType;
-}
+};
 
 export default function PokedexGrid({
   searchTerm,

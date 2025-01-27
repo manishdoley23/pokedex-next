@@ -3,7 +3,9 @@
 import { useCompare } from "@/lib/hooks/use-pokemon-hooks";
 import { ComparePokemonStats } from "./compare-pokemon-stats";
 import { ComparePokemonMoves } from "./compare-pokemon-moves";
+import { ComparePokemonTypes } from "./compare-pokemon-types";
 import { TypeBadge } from "../ui/badge";
+import Image from "next/image";
 
 export function ComparePokemonView() {
   const { compareList, removeFromCompare } = useCompare();
@@ -18,39 +20,56 @@ export function ComparePokemonView() {
   }
 
   return (
-    <div className="mt-8 p-4 bg-white rounded-lg shadow">
-      <div className="space-y-6">
-        {/* Pokemon Headers */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-          {compareList.map((pokemon) => (
-            <div key={pokemon.id} className="text-center border rounded-lg p-4">
-              <h3 className="text-xl font-bold capitalize">{pokemon.name}</h3>
-              <div className="flex gap-2 justify-center mt-2">
-                {pokemon.types.map((type) => (
-                  <TypeBadge key={type.type.name} type={type.type.name} />
-                ))}
+    <div className="mt-8 space-y-8">
+      {/* Pokemon Headers */}
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+        {compareList.map((pokemon) => (
+          <div
+            key={pokemon.id}
+            className="text-center border rounded-lg p-4 bg-white shadow"
+          >
+            {pokemon.sprites.other["official-artwork"].front_default && (
+              <div className="w-32 h-32 mx-auto mb-4">
+                <Image
+                  src={pokemon.sprites.other["official-artwork"].front_default}
+                  alt={pokemon.name}
+                  className="object-contain"
+                  width={100}
+                  height={100}
+                />
               </div>
-              <button
-                onClick={() => removeFromCompare(pokemon.id)}
-                className="mt-2 text-sm text-red-500 hover:text-red-700"
-              >
-                Remove
-              </button>
+            )}
+            <h3 className="text-xl font-bold capitalize">{pokemon.name}</h3>
+            <div className="flex gap-2 justify-center mt-2">
+              {pokemon.types.map((type) => (
+                <TypeBadge key={type.type.name} type={type.type.name} />
+              ))}
             </div>
-          ))}
-        </div>
+            <button
+              onClick={() => removeFromCompare(pokemon.id)}
+              className="mt-2 text-sm text-red-500 hover:text-red-700"
+            >
+              Remove
+            </button>
+          </div>
+        ))}
+      </div>
 
-        {/* Stats Comparison */}
-        <div>
-          <h4 className="text-lg font-semibold mb-4">Base Stats Comparison</h4>
-          <ComparePokemonStats pokemon={compareList} />
-        </div>
+      {/* Type Effectiveness */}
+      <div>
+        <ComparePokemonTypes pokemon={compareList} />
+      </div>
 
-        {/* Move Comparison */}
-        <div>
-          <h4 className="text-lg font-semibold mb-4">Move Pool Analysis</h4>
-          <ComparePokemonMoves pokemon={compareList} />
-        </div>
+      {/* Stats Comparison */}
+      <div className="bg-white rounded-lg shadow p-6">
+        <h4 className="text-lg font-semibold mb-4">Base Stats Comparison</h4>
+        <ComparePokemonStats pokemon={compareList} />
+      </div>
+
+      {/* Move Comparison */}
+      <div className="bg-white rounded-lg shadow p-6">
+        <h4 className="text-lg font-semibold mb-4">Move Pool Analysis</h4>
+        <ComparePokemonMoves pokemon={compareList} />
       </div>
     </div>
   );
